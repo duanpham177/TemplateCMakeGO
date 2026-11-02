@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Go app (CMake)",
+            "type": "go",
+            "request": "launch",
+            "mode": "exec",
+            "program": "${workspaceFolder}/out/build/windows-debug/bin/go-app.exe",
+            "preLaunchTask": "CMake: build windows-debug"
+        }
+    ]
+}

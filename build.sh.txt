@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Usage: ./build.sh [preset] [target]
+#   ./build.sh
+#   ./build.sh linux-clang-release go-app_run
+#   ./build.sh linux-gcc-debug go-app_test
+set -euo pipefail
+
+cd "$(dirname "$0")"
+
+PRESET="${1:-linux-gcc-debug}"
+TARGET="${2:-go-app}"
+
+for tool in cmake ninja go; do
+  command -v "$tool" >/dev/null || { echo "[ERROR] $tool not found"; exit 1; }
+done
+
+echo "[1/2] Configure: $PRESET"
+cmake --preset "$PRESET"
+
+echo "[2/2] Build target: $TARGET"
+cmake --build --preset "$PRESET" --target "$TARGET"
+
+echo "[OK] Done."

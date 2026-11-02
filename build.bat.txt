@@ -1,0 +1,32 @@
+@echo off
+setlocal
+
+REM Usage: build.bat [preset] [target]
+REM   build.bat
+REM   build.bat windows-release go-app_run
+REM   build.bat windows-debug go-app_test
+cd /d "%~dp0"
+
+set "PRESET=%~1"
+if "%PRESET%"=="" set "PRESET=windows-debug"
+set "TARGET=%~2"
+if "%TARGET%"=="" set "TARGET=go-app"
+
+for %%T in (cmake ninja go) do (
+    where %%T >nul 2>nul
+    if errorlevel 1 (
+        echo [ERROR] %%T not found in PATH.
+        exit /b 1
+    )
+)
+
+echo [1/2] Configure: %PRESET%
+cmake --preset %PRESET%
+if errorlevel 1 exit /b 1
+
+echo [2/2] Build target: %TARGET%
+cmake --build --preset %PRESET% --target %TARGET%
+if errorlevel 1 exit /b 1
+
+echo [OK] Done.
+exit /b 0
